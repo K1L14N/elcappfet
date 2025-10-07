@@ -1,103 +1,122 @@
-import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  SafeAreaView,
+  Image,
+} from "react-native";
+import { MenuCard } from "./components/MenuCard";
 
-const menuOptions = [
-  {
-    tag: "BISTRO",
-    name: "Grilled Chicken Salad",
-    image: "https://via.placeholder.com/150",
-    rating: 4.5,
-  },
-  {
-    tag: "VITALITY",
-    name: "Quinoa Veggie Bowl",
-    image: "https://via.placeholder.com/150",
-    rating: 4.0,
-  },
-];
+const { width } = Dimensions.get("window");
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Elcappfet</Text>
-      <Text style={styles.subheader}>Today's Lunch Menu</Text>
-      <View style={styles.cardsContainer}>
-        {menuOptions.map((option, index) => (
-          <View key={index} style={styles.card}>
-            <Image source={{ uri: option.image }} style={styles.image} />
-            <Text style={styles.tag}>{option.tag}</Text>
-            <Text style={styles.name}>{option.name}</Text>
-            <View style={styles.ratingContainer}>
-              {Array.from({ length: 5 }, (_, i) => (
-                <Text key={i} style={styles.star}>
-                  {i < Math.floor(option.rating) ? "★" : "☆"}
-                </Text>
-              ))}
-              <Text style={styles.ratingText}> ({option.rating})</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.content}
+        >
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={styles.title}>Menu du jour</Text>
+            <View style={styles.dateContainer}>
+              <Image
+                source={{
+                  uri: "https://unsplash.it/16/16",
+                }}
+                style={styles.calendarIcon}
+              />
+              <Text style={styles.dateText}>lundi 6 octobre 2025</Text>
             </View>
           </View>
-        ))}
+
+          {/* Menu Cards */}
+          <View style={styles.cardsContainer}>
+            <MenuCard menuName="Cordon bleu de dinde" />
+            <MenuCard menuName="Cordon bleu de dinde" />
+          </View>
+
+          {/* Bottom Button */}
+          <TouchableOpacity style={styles.bottomButton}>
+            <Text style={styles.bottomButtonText}>
+              Voir le menu de la semaine
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
-      <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#e1e1e1",
+  },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 50,
+    backgroundColor: "#e1e1e1",
+    position: "relative",
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
     paddingHorizontal: 20,
+    paddingTop: 50,
+    paddingBottom: 50,
   },
   header: {
+    height: 100,
+    alignItems: "center",
+  },
+  dateContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 40,
+  },
+  calendarIcon: {
+    width: 16,
+    height: 16,
+    marginRight: 8,
+  },
+  dateText: {
+    fontSize: 14,
+    color: "#4a5565",
+    textTransform: "capitalize",
+    fontFamily: "Arial",
+  },
+  title: {
     fontSize: 24,
     fontWeight: "bold",
+    color: "#000",
     textAlign: "center",
-    marginBottom: 10,
-  },
-  subheader: {
-    fontSize: 18,
-    textAlign: "center",
-    marginBottom: 20,
+    fontFamily: "Arial",
   },
   cardsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    gap: 50,
   },
-  card: {
-    backgroundColor: "#f0f0f0",
-    borderRadius: 10,
-    padding: 10,
-    width: "45%",
+  bottomButton: {
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderWidth: 1.173,
+    borderColor: "rgba(229, 231, 235, 0.5)",
+    borderRadius: 20,
+    height: 66,
+    justifyContent: "center",
     alignItems: "center",
+    marginHorizontal: 60,
+    marginTop: 20,
   },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  tag: {
+  bottomButtonText: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  name: {
-    fontSize: 14,
+    color: "#364153",
+    fontFamily: "Arial",
     textAlign: "center",
-    marginVertical: 5,
-  },
-  ratingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  star: {
-    fontSize: 16,
-    color: "#ffcc00",
-  },
-  ratingText: {
-    fontSize: 14,
-    color: "#333",
   },
 });
