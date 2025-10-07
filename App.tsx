@@ -1,19 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
   ScrollView,
   SafeAreaView,
   Image,
 } from "react-native";
 import { MenuCard } from "./components/MenuCard";
+import { generateMenuImage, MenuItem } from "./geminiService";
 
-const { width } = Dimensions.get("window");
+// Menu items data with ingredients
+const menuItems: MenuItem[] = [
+  {
+    title: "Cordon bleu de dinde",
+    ingredients: [
+      "escalope de dinde",
+      "jambon",
+      "fromage",
+      "chapelure",
+      "oeufs",
+      "farine",
+    ],
+  },
+  {
+    title: "Ananas rôti au miel et au thym",
+    ingredients: [
+      "escalope de dinde",
+      "jambon",
+      "fromage",
+      "chapelure",
+      "oeufs",
+      "farine",
+    ],
+  },
+];
 
 export default function App() {
+  const [generatedImages, setGeneratedImages] = useState<(string | null)[]>([]);
+
+  useEffect(() => {
+    const generateImages = async () => {
+      const images = await Promise.all(
+        menuItems.map((item) => generateMenuImage(item))
+      );
+      setGeneratedImages(images);
+    };
+
+    generateImages();
+  }, []);
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -37,8 +73,14 @@ export default function App() {
 
           {/* Menu Cards */}
           <View style={styles.cardsContainer}>
-            <MenuCard menuName="Cordon bleu de dinde" />
-            <MenuCard menuName="Cordon bleu de dinde" />
+            <MenuCard
+              imageUri={generatedImages[0] || undefined}
+              menuName={menuItems[0].title}
+            />
+            <MenuCard
+              imageUri={generatedImages[1] || undefined}
+              menuName={menuItems[1].title}
+            />
           </View>
 
           {/* Bottom Button */}
